@@ -1,0 +1,47 @@
+
+<h1>Products</h1>
+
+<table>
+  <tfoot>
+    <tr>
+      <td colspan="3">
+        <%= link_to 'New Product', new_product_path %>
+      </td>
+    </tr>
+  </tfoot>
+  <tbody>
+    <% @products.each do |product| %>
+      <tr class="<%= cycle('list_line_odd', 'list_line_even') %>">
+
+        <% if product.image.attached? %>
+          <td class="image">
+            <%= image_tag(product.image, :class => 'list_image', :style => "width: 100px;, height: 100px;") %>
+          </td>
+        <% end %>  
+        <td class="description">
+          <h1><%= product.title %></h1>
+          <p>
+            <%= product.description %>
+            <h1>$<%= product.price  %></h1>
+          </p>
+        </td>
+
+         
+
+        <td class="actions">
+
+          <ul>
+            <% if current_user.admin? || current_user.products.include?(product) %>
+              <li><%= link_to 'Show', product  %></li>
+              <li><%= link_to 'Edit', edit_product_path(product) %></li>
+              <li><%= link_to 'Destroy', product, method: :delete,
+                            data: { turbo_method: :delete , turbo_confirm: "are you sure?" } %>
+              </li>
+            <% end %>
+            <li><%= button_to 'Add to Cart', line_items_path(product_id: product) %></li>
+          </ul>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
